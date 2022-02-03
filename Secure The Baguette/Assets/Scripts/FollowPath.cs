@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FollowPath : MonoBehaviour
 {
+    public CharacterController characterController;
+    public CharacterMovement characterMovementScript;
     public Transform[] wayPointList;
     public int currentWayPoint = 0;
     Transform targetWayPoint;
     public Vector3 playerSpawnPoint;
     public Quaternion playerSpawnRotation;
-    public GameObject player;
+    private GameObject player;
     public Renderer playerRend;
     public Light detectionLight;
     public float visionRange;
@@ -22,8 +25,10 @@ public class FollowPath : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        characterMovementScript = GameObject.Find("Player").GetComponent<CharacterMovement>();
         alerted = false;
         player = GameObject.Find("Player");
+        characterController = player.GetComponent<CharacterController>();
         playerSpawnPoint = player.transform.position;
         playerSpawnRotation = player.transform.rotation;
     }
@@ -88,15 +93,17 @@ public class FollowPath : MonoBehaviour
     {
         alerted = true;
         playerRend.material.color = new Color32(5, 192, 236, 255);
-        player.gameObject.GetComponent<CharacterMovement>().enabled = false;
-        player.gameObject.GetComponent<CharacterController>().enabled = false;
+        characterMovementScript.speed = 0f;
         yield return new WaitForSeconds(0.5f);
+        characterController.enabled = false;
         playerRend.material.color = new Color32(5, 96, 236, 255);
         player.transform.rotation = playerSpawnRotation;
         player.transform.position = playerSpawnPoint;
+        characterController.enabled = true;
+        characterMovementScript.speed = 16f;
+        //Scene scene = SceneManager.GetActiveScene(); 
+        //SceneManager.LoadScene(scene.name);
         alerted = false;
-        player.gameObject.GetComponent<CharacterMovement>().enabled = true;
-        player.gameObject.GetComponent<CharacterController>().enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)

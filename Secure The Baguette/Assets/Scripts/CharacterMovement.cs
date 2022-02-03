@@ -10,7 +10,7 @@ public class CharacterMovement : MonoBehaviour
     public Transform cam;
     public Transform groundCheck;
     public LayerMask groundMask;
-    private float speed = 16f;
+    public float speed = 16f;
     private float turnSmoothTime = 0.1f;
     [SerializeField] float gravity = -19.62f;
     private float groundDistance = 0.2f;
