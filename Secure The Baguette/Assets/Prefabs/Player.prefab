@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 5762432234797147280}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -153,7 +153,11 @@ MonoBehaviour:
     m_Bits: 64
   speed: 16
   gravity: -19.62
-  jumpHeight: 3
+  jumpHeight: 2.5
+  isSprinting: 0
+  isCrouching: 0
+  sprintingMultiplier: 1.5
+  crouchingMultiplier: 0.5
 --- !u!1 &5762432234884288545
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,7 +201,7 @@ GameObject:
   - component: {fileID: 5762432234963359263}
   - component: {fileID: 1615770665}
   m_Layer: 0
-  m_Name: Model
+  m_Name: PlayerModel
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
