@@ -487,7 +487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5271534cd66e2ff48ab6ce26bbf58906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  door: {fileID: 384091370}
+  keyAccess: 0
 --- !u!65 &384091372
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -777,7 +777,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814fc31c09edf5247b476b21bdd8b9f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorCollider: {fileID: 384091368}
   keyAccess: 0
 --- !u!1 &877289197
 GameObject:
@@ -1543,19 +1542,18 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5762432234797147292, guid: 582f10115e585c445a29042ad947c19d, type: 3}
   m_PrefabInstance: {fileID: 5762432235245395352}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1535935157
-BoxCollider:
+--- !u!114 &1535935157
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1535935156}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad3da650c40dcf468c4839ffd07f53d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1700264197 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5762432234797147293, guid: 582f10115e585c445a29042ad947c19d, type: 3}
@@ -2649,6 +2647,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1615770665, guid: 582f10115e585c445a29042ad947c19d, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5762432234797147280, guid: 582f10115e585c445a29042ad947c19d, type: 3}
       propertyPath: cam
       value: 
