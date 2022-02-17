@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1962835468561151139}
   - component: {fileID: 1962835468561151136}
   - component: {fileID: 1962835468561151137}
-  - component: {fileID: 1962835468561151151}
   - component: {fileID: 1962835468561151150}
   - component: {fileID: 1962835468561151145}
   - component: {fileID: 1962835468561151148}
@@ -317,22 +316,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!111 &1962835468561151151
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1962835468561151142}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: ab4894066a0712c4b890e3fd7d5c4409, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: ab4894066a0712c4b890e3fd7d5c4409, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 0
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!114 &1962835468561151150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,7 +350,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1962835468561151142}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: d1b1af24635cf7348aabe9f5d420f19c, type: 2}
   m_CullingMode: 0

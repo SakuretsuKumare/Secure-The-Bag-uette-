@@ -42,6 +42,5 @@ public class PickPocket : MonoBehaviour
             keyCardText.gameObject.SetActive(false);
             transform.GetComponent<PickPocket>().enabled = false;
         }
-
     }
 }

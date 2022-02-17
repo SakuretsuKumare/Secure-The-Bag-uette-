@@ -5,6 +5,12 @@ using UnityEngine;
 public class DoorScript : MonoBehaviour
 {
     [SerializeField] KeyScript.KeyAccess keyAccess;
+    private Animator animator;
+
+    void Start()
+    {
+        animator = gameObject.GetComponent<Animator>();
+    }
 
     public KeyScript.KeyAccess GetKeyAccess()
     {
@@ -13,6 +19,7 @@ public class DoorScript : MonoBehaviour
 
     public void OpenDoor()
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        animator.SetBool("DoorOpening", true);
     }
 }
