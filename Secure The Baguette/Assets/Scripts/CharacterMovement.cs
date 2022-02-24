@@ -24,6 +24,7 @@ public class CharacterMovement : MonoBehaviour
     public float sprintingMultiplier = 1.5f;
     public float crouchingMultiplier = 0.5f;
     Vector3 velocity;
+    public bool disabled = false;
     bool isGrounded;
 
     // Start is called before the first frame update
@@ -34,6 +35,14 @@ public class CharacterMovement : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        if (!disabled)
+        {
+            PlayerEnabled();
+        }
+    }
+
+    void PlayerEnabled()
     {
         // Checks if the player is touching the ground or not.
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
