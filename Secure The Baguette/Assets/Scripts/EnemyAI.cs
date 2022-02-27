@@ -11,8 +11,8 @@ public class EnemyAI : MonoBehaviour
     public Transform[] wayPointList;
     public int currentWayPoint;
     Transform targetWayPoint;
-    public Vector3 playerLastPosition;
     public Vector3 playerSpawnPoint;
+    public Vector3 lastSeenPlayerPosition;
     public Quaternion playerSpawnRotation;
     private GameObject player;
     private GameObject playerModel;
@@ -20,7 +20,7 @@ public class EnemyAI : MonoBehaviour
     public Renderer playerRend;
     public Light detectionLight;
     public float visionRange;
-    public float extendedVisionRange;
+    public float extendedVisionRangeMultiplier;
     public float visionConeAngle;
     public float chaseRadius;
     public float chaseSpeed;
@@ -30,9 +30,8 @@ public class EnemyAI : MonoBehaviour
     public bool alerted;
     public bool suspicious;
     public bool playerObstructed;
-    public bool transitionBack;
+    public bool noticed;
 
-    // Use this for initialization
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -46,10 +45,10 @@ public class EnemyAI : MonoBehaviour
         playerSpawnRotation = player.transform.rotation;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (currentWayPoint < this.wayPointList.Length && !IsIdle && !alerted && !suspicious)
+        //Patrol
+        if (currentWayPoint < this.wayPointList.Length && !IsIdle && !alerted && !suspicious && !noticed)
         {
             if (targetWayPoint == null)
                 targetWayPoint = wayPointList[currentWayPoint];
@@ -58,8 +57,9 @@ public class EnemyAI : MonoBehaviour
 
         detectionLight.color = new Color32(248, 175, 0, 255);
 
+        //Raycasting
         RaycastHit hit;
-        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRange && Physics.Raycast(transform.position, (player.transform.position - transform.position), out hit, visionRange * extendedVisionRange) && !hit.transform.CompareTag("Player"))
+        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Physics.Raycast(transform.position, (player.transform.position - transform.position), out hit, visionRange * extendedVisionRangeMultiplier) && !hit.transform.CompareTag("Player"))
         {
             Debug.DrawRay(transform.position, (player.transform.position - transform.position), Color.red, 0.01f, false);
             playerObstructed = true;
@@ -69,6 +69,7 @@ public class EnemyAI : MonoBehaviour
             playerObstructed = false;
         }
 
+        //Detected
         if (Vector3.Distance(transform.position, player.transform.position) <= visionRange && !playerObstructed)
         {
             if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle || alerted)
@@ -86,92 +87,53 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRange && Vector3.Distance(transform.position, player.transform.position) > visionRange && !playerObstructed)
+        //Noticed
+        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && !playerObstructed && !characterMovementScript.isCrouching && characterController.velocity != Vector3.zero && !noticed)
         {
-            if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle || alerted)
-            {
-                if (!alerted && !playerObstructed)
-                {
-                    if (!suspicious)
-                    {
-                        suspicious = true;
-                        playerLastPosition = player.transform.position;
-                    }
-                }
-            }
+            StartCoroutine(Notice());
         }
 
-        if (suspicious && !playerObstructed && !alerted && navMeshAgent.pathStatus != NavMeshPathStatus.PathComplete && !IsIdle)
-        {
-            transform.forward = Vector3.RotateTowards(transform.forward, playerLastPosition - transform.position, rotSpeed * Time.deltaTime, 0.0f);
-            transform.position = Vector3.MoveTowards(transform.position, playerLastPosition, chaseSpeed * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRange && Vector3.Distance(transform.position, player.transform.position) > visionRange && !playerObstructed)
-            {
-                if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle || alerted)
-                {
-                    if (Vector3.Distance(transform.position, targetWayPoint.position) <= chaseRadius)
-                    {
-                        playerLastPosition = player.transform.position;
-                        transform.forward = Vector3.RotateTowards(transform.forward, playerLastPosition - transform.position, rotSpeed * Time.deltaTime, 0.0f);
-                        transform.position = Vector3.MoveTowards(transform.position, playerLastPosition, chaseSpeed * Time.deltaTime);
-                    }
-                    else
-                    {
-                        suspicious = false;
-                        transitionBack = true;
-                        StartCoroutine(Idle());
-                    }
-                }
-            }
-
-        }
-        else
-        {
-            suspicious = false;
-        }
-
-        if (Vector3.Distance(transform.position, playerLastPosition) < 0.1f)
-        {
-            transitionBack = true;
-            StartCoroutine(Idle());
-        }
-
-        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange && !playerObstructed && !characterMovementScript.isCrouching && characterController.velocity != Vector3.zero)
+        if (noticed && !playerObstructed)
         {
             Vector3 playerPositionAtOurHeight = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-            if (!alerted && !playerObstructed)
+            transform.forward = Vector3.RotateTowards(transform.forward, playerPositionAtOurHeight - transform.position, rotSpeed * Time.deltaTime, 0.0f);
+        }
+
+        //Suspicion
+        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Vector3.Distance(transform.position, player.transform.position) > visionRange && !suspicious && !playerObstructed)
+        {
+            if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle)
             {
-                StartCoroutine(Caught());
+                suspicious = true;
+                lastSeenPlayerPosition = player.transform.position;
+                navMeshAgent.enabled = true;
+                navMeshAgent.speed = chaseSpeed;
+                navMeshAgent.destination = lastSeenPlayerPosition;
             }
-            if (alerted)
-            {
-                detectionLight.color = Color.red;
-                transform.forward = Vector3.RotateTowards(transform.forward, playerPositionAtOurHeight - transform.position, rotSpeed * Time.deltaTime, 0.0f);
-            }
+        }
+        if (navMeshAgent.enabled == true && navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance && suspicious)
+        {
+            navMeshAgent.isStopped = true;
+            navMeshAgent.ResetPath();
+            StartCoroutine(Suspicion());
+        }
+        if (navMeshAgent.enabled == true && suspicious)
+        {
+            navMeshAgent.destination = lastSeenPlayerPosition;
         }
     }
 
     void walk()
     {
-        if (!suspicious)
+        if (!suspicious && !noticed)
         {
             transform.forward = Vector3.RotateTowards(transform.forward, targetWayPoint.position - transform.position, rotSpeed * Time.deltaTime, 0.0f);
-
-            if (!transitionBack)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, targetWayPoint.position, speed * Time.deltaTime);
-            }
-            else
-            {
-                navMeshAgent.destination = targetWayPoint.position;
-            }
+            transform.position = Vector3.MoveTowards(transform.position, targetWayPoint.position, speed * Time.deltaTime);
 
             if (transform.position == targetWayPoint.position)
             {
                 if (navMeshAgent.enabled == true)
                 {
-                    transitionBack = false;
                     navMeshAgent.enabled = false;
                 }
                 if (!targetWayPoint.CompareTag("IdleExclusion"))
@@ -191,22 +153,52 @@ public class EnemyAI : MonoBehaviour
             }
 
         }
+        else
+        {
+            navMeshAgent.destination = targetWayPoint.position;
+        }
     }
 
+    IEnumerator Suspicion()
+    {
+        yield return new WaitForSeconds(2f);
+        suspicious = false;
+        if (navMeshAgent.enabled == true)
+        {
+            navMeshAgent.speed = speed;
+            navMeshAgent.isStopped = true;
+            navMeshAgent.ResetPath();
+            navMeshAgent.destination = targetWayPoint.position;
+        }
+        StartCoroutine(Idle());
+    }
+    IEnumerator Notice()
+    {
+        noticed = true;
+        yield return new WaitForSeconds(0.5f);
+        noticed = false;
+    }
     IEnumerator Idle()
     {
+        if (navMeshAgent.enabled == true)
+        {
+            navMeshAgent.speed = 0;
+        }
         IsIdle = true;
         yield return new WaitForSeconds(Random.Range(2f, 5f));
         IsIdle = false;
-        if (transitionBack)
+        if (navMeshAgent.enabled == true)
         {
-            navMeshAgent.enabled = true;
-            navMeshAgent.destination = targetWayPoint.position;
+            navMeshAgent.speed = speed;
         }
     }
 
     IEnumerator Caught()
     {
+        if (navMeshAgent.enabled == true)
+        {
+            navMeshAgent.speed = 0;
+        }
         alerted = true;
         playerRend.material.color = new Color32(5, 192, 236, 255);
         characterMovementScript.speed = 0f;
@@ -220,6 +212,7 @@ public class EnemyAI : MonoBehaviour
         //Scene scene = SceneManager.GetActiveScene(); 
         //SceneManager.LoadScene(scene.name);
         alerted = false;
+        StartCoroutine(Idle());
     }
 
     private void OnTriggerEnter(Collider other)
@@ -230,15 +223,12 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            if (other.gameObject.CompareTag("Waypoint") && transitionBack)
+            if (other.gameObject.CompareTag("Waypoint") || other.gameObject.CompareTag("IdleExclusion"))
             {
-                transitionBack = false;
-                navMeshAgent.enabled = false;
-            }
-            if (other.gameObject.CompareTag("IdleExclusion") && transitionBack)
-            {
-                transitionBack = false;
-                navMeshAgent.enabled = false;
+                if (navMeshAgent.enabled == true)
+                {
+                    navMeshAgent.enabled = false;
+                }
             }
         }
     }
