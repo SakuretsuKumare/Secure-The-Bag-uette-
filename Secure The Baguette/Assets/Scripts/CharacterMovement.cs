@@ -21,10 +21,10 @@ public class CharacterMovement : MonoBehaviour
     float turnSmoothVelocity;
     public bool isSprinting = false;
     public bool isCrouching = false;
+    public bool disabled = false;
     public float sprintingMultiplier = 1.5f;
     public float crouchingMultiplier = 0.5f;
     Vector3 velocity;
-    public bool disabled = false;
     bool isGrounded;
 
     // Start is called before the first frame update
@@ -95,6 +95,7 @@ public class CharacterMovement : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
+        /*
         // Checks if the player is sprinting or not (Left Shift to sprint)
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -104,10 +105,10 @@ public class CharacterMovement : MonoBehaviour
         else
         {
             isSprinting = false;
-        }
+        }*/
 
         // Checks if the player is crouching or not (Left CTRL to crouch)
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             isCrouching = true;
         }

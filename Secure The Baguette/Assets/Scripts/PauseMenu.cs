@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
+    private bool pauseMenuActive = false;
 
     // Start is called before the first frame update
     void Start()
@@ -18,17 +19,36 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // Presses the Escape key to pause the game.
+        if (pauseMenuActive == false)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                pauseMenuActive = true;
+                Pause();
+            }
+        }
+
+        else if (pauseMenuActive == true)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                pauseMenuActive = false;
+                Resume();
+            }
+        }
     }
 
     public void Pause()
     {
+        Cursor.visible = true;
         pauseMenu.SetActive(true);
         Time.timeScale = 0f;
     }
 
     public void Resume()
     {
+        Cursor.visible = false;
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
     }
