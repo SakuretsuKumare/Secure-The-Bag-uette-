@@ -14,9 +14,11 @@ public class SecurityCamera : MonoBehaviour
     public float rotAngleYMax;
     public float originRotation;
     public float resetCameraAngle;
+    public float extendedVisionRangeMultiplier;
     public Renderer playerRend;
     public Light detectionLight;
     public bool alerted;
+    public bool playerObstructed;
     public float visionRange;
     public float visionConeAngle;
     private GameObject player;
@@ -44,8 +46,20 @@ public class SecurityCamera : MonoBehaviour
             detectionLight.color = new Color32(0, 27, 248, 255);
         }
 
+        //Raycasting
+        RaycastHit hit;
+        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Physics.Raycast(transform.position, (player.transform.position - transform.position), out hit, visionRange * extendedVisionRangeMultiplier) && !hit.transform.CompareTag("Player"))
+        {
+            Debug.DrawRay(transform.position, (player.transform.position - transform.position), Color.red, 0.01f, false);
+            playerObstructed = true;
+        }
+        else
+        {
+            playerObstructed = false;
+        }
+
         //Detected
-        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange)
+        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange && !playerObstructed)
         {
             if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle || alerted)
             {
