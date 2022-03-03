@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class EnemyAI : MonoBehaviour
     public Vector3 lastSeenPlayerPosition;
     private GameObject player;
     private GameObject playerModel;
+    public RawImage suspicionSign;
     private NavMeshAgent navMeshAgent;
     public Renderer playerRend;
     public Light detectionLight;
@@ -101,6 +103,7 @@ public class EnemyAI : MonoBehaviour
         {
             if (navMeshAgent.enabled == true)
             {
+                suspicionSign.enabled = true;
                 navMeshAgent.isStopped = true;
                 navMeshAgent.ResetPath();
                 lastSeenPlayerPosition = player.transform.position;
@@ -115,6 +118,7 @@ public class EnemyAI : MonoBehaviour
         {
             if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle)
             {
+                suspicionSign.enabled = true;
                 idleSuspicious = false;
                 suspicious = true;
                 lastSeenPlayerPosition = player.transform.position;
@@ -191,6 +195,7 @@ public class EnemyAI : MonoBehaviour
         IsIdle = false;
         if (navMeshAgent.enabled == true)
         {
+            suspicionSign.enabled = false;
             suspicious = false;
             navMeshAgent.speed = speed;
             navMeshAgent.isStopped = true;
@@ -208,6 +213,7 @@ public class EnemyAI : MonoBehaviour
         yield return new WaitForSeconds(2f);
         if (navMeshAgent.enabled == true && idleSuspicious)
         {
+            suspicionSign.enabled = false;
             suspicious = false;
             navMeshAgent.speed = speed;
             navMeshAgent.isStopped = true;
@@ -241,6 +247,7 @@ public class EnemyAI : MonoBehaviour
         //Scene scene = SceneManager.GetActiveScene(); 
         //SceneManager.LoadScene(scene.name);
         alerted = false;
+        suspicionSign.enabled = false;
         StartCoroutine(Idle());
     }
 

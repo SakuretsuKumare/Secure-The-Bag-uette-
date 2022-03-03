@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SecurityCamera : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class SecurityCamera : MonoBehaviour
     public Light detectionLight;
     public bool alerted;
     public bool playerObstructed;
+    public RawImage suspicionSign;
     public float visionRange;
     public float visionConeAngle;
     private GameObject player;
@@ -73,6 +75,7 @@ public class SecurityCamera : MonoBehaviour
 
         IEnumerator Caught()
         {
+            suspicionSign.enabled = true;
             alerted = true;
             playerRend.material.color = new Color32(5, 192, 236, 255);
             characterMovementScript.speed = 0f;
@@ -87,6 +90,7 @@ public class SecurityCamera : MonoBehaviour
             //SceneManager.LoadScene(scene.name);
             alerted = false;
             transform.rotation = Quaternion.Euler(resetCameraAngle, 0, 0);
+            suspicionSign.enabled = false;
         }
     }
 }
