@@ -11,9 +11,7 @@ public class EnemyAI : MonoBehaviour
     public Transform[] wayPointList;
     public int currentWayPoint;
     Transform targetWayPoint;
-    public Vector3 playerSpawnPoint;
     public Vector3 lastSeenPlayerPosition;
-    public Quaternion playerSpawnRotation;
     private GameObject player;
     private GameObject playerModel;
     private NavMeshAgent navMeshAgent;
@@ -29,6 +27,7 @@ public class EnemyAI : MonoBehaviour
     public bool IsIdle;
     public bool alerted;
     public bool suspicious;
+    public bool stillSuspicious;
     public bool playerObstructed;
     public bool noticed;
 
@@ -41,8 +40,6 @@ public class EnemyAI : MonoBehaviour
         playerModel = GameObject.Find("PlayerModel");
         playerRend = playerModel.GetComponent<MeshRenderer>();
         characterController = player.GetComponent<CharacterController>();
-        playerSpawnPoint = player.transform.position;
-        playerSpawnRotation = player.transform.rotation;
     }
 
     void Update()
@@ -88,9 +85,12 @@ public class EnemyAI : MonoBehaviour
         }
 
         //Noticed
-        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && !playerObstructed && !characterMovementScript.isCrouching && characterController.velocity != Vector3.zero && !noticed)
+        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && !(Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle) && !playerObstructed && !characterMovementScript.isCrouching && characterController.velocity != Vector3.zero && !noticed)
         {
+            Debug.Log("WHAT'S THAT");
             StartCoroutine(Notice());
+            navMeshAgent.isStopped = true;
+            navMeshAgent.ResetPath();
         }
 
         if (noticed && !playerObstructed)
@@ -100,26 +100,25 @@ public class EnemyAI : MonoBehaviour
         }
 
         //Suspicion
-        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Vector3.Distance(transform.position, player.transform.position) > visionRange && !suspicious && !playerObstructed)
+        if (Vector3.Distance(transform.position, targetWayPoint.position) <= chaseRadius && Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Vector3.Distance(transform.position, player.transform.position) > visionRange && !suspicious && !playerObstructed)
         {
             if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle)
             {
+                Debug.Log("THERE YOU ARE");
                 suspicious = true;
                 lastSeenPlayerPosition = player.transform.position;
                 navMeshAgent.enabled = true;
                 navMeshAgent.speed = chaseSpeed;
+                navMeshAgent.isStopped = true;
+                navMeshAgent.ResetPath();
                 navMeshAgent.destination = lastSeenPlayerPosition;
+                Debug.Log(Vector3.Distance(transform.position, lastSeenPlayerPosition));
             }
         }
-        if (navMeshAgent.enabled == true && navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance && suspicious)
+        if (navMeshAgent.enabled == true && Vector3.Distance(transform.position, lastSeenPlayerPosition) < 0.1)
         {
-            navMeshAgent.isStopped = true;
-            navMeshAgent.ResetPath();
-            StartCoroutine(Suspicion());
-        }
-        if (navMeshAgent.enabled == true && suspicious)
-        {
-            navMeshAgent.destination = lastSeenPlayerPosition;
+                Debug.Log("WHERE DID HE GO");
+                StartCoroutine(Idle());
         }
     }
 
@@ -159,29 +158,17 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    IEnumerator Suspicion()
-    {
-        yield return new WaitForSeconds(2f);
-        suspicious = false;
-        if (navMeshAgent.enabled == true)
-        {
-            navMeshAgent.speed = speed;
-            navMeshAgent.isStopped = true;
-            navMeshAgent.ResetPath();
-            navMeshAgent.destination = targetWayPoint.position;
-        }
-        StartCoroutine(Idle());
-    }
     IEnumerator Notice()
     {
         noticed = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2f);
         noticed = false;
     }
     IEnumerator Idle()
     {
         if (navMeshAgent.enabled == true)
         {
+            stillSuspicious = true;
             navMeshAgent.speed = 0;
         }
         IsIdle = true;
@@ -189,7 +176,12 @@ public class EnemyAI : MonoBehaviour
         IsIdle = false;
         if (navMeshAgent.enabled == true)
         {
+            suspicious = false;
             navMeshAgent.speed = speed;
+            navMeshAgent.isStopped = true;
+            navMeshAgent.ResetPath();
+            navMeshAgent.destination = targetWayPoint.position;
+            stillSuspicious = false;
         }
     }
 
@@ -205,8 +197,8 @@ public class EnemyAI : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         characterController.enabled = false;
         playerRend.material.color = new Color32(5, 96, 236, 255);
-        player.transform.rotation = playerSpawnRotation;
-        player.transform.position = playerSpawnPoint;
+        player.transform.position = characterMovementScript.playerSpawnPoint;
+        player.transform.rotation = characterMovementScript.playerSpawnRotation;
         characterController.enabled = true;
         characterMovementScript.speed = 16f;
         //Scene scene = SceneManager.GetActiveScene(); 

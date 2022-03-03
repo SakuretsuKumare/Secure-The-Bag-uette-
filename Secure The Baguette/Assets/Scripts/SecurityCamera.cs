@@ -6,9 +6,7 @@ public class SecurityCamera : MonoBehaviour
 {
     public CharacterController characterController;
     public CharacterMovement characterMovementScript;
-    public Vector3 playerSpawnPoint;
     public Vector3 lastSeenPlayerPosition;
-    public Quaternion playerSpawnRotation;
     public float speed = 1;
     public float rotAngleYMin;
     public float rotAngleYMax;
@@ -33,8 +31,6 @@ public class SecurityCamera : MonoBehaviour
         playerModel = GameObject.Find("PlayerModel");
         playerRend = playerModel.GetComponent<MeshRenderer>();
         characterController = player.GetComponent<CharacterController>();
-        playerSpawnPoint = player.transform.position;
-        playerSpawnRotation = player.transform.rotation;
     }
 
     void Update()
@@ -83,8 +79,8 @@ public class SecurityCamera : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             characterController.enabled = false;
             playerRend.material.color = new Color32(5, 96, 236, 255);
-            player.transform.rotation = playerSpawnRotation;
-            player.transform.position = playerSpawnPoint;
+            player.transform.position = characterMovementScript.playerSpawnPoint;
+            player.transform.rotation = Quaternion.identity;
             characterController.enabled = true;
             characterMovementScript.speed = 16f;
             //Scene scene = SceneManager.GetActiveScene(); 

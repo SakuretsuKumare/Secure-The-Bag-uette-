@@ -9,6 +9,8 @@ public class CharacterMovement : MonoBehaviour
 {
     // Declaring and initiating variables.
 
+    public Vector3 playerSpawnPoint;
+    public Quaternion playerSpawnRotation;
     public CharacterController controller;
     public Transform cam;
     public Transform groundCheck;
@@ -30,7 +32,8 @@ public class CharacterMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        playerSpawnPoint = transform.position;
+        playerSpawnRotation = transform.rotation;
     }
 
     // Update is called once per frame

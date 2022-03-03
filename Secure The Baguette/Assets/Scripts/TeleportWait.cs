@@ -28,10 +28,12 @@ public class TeleportWait : MonoBehaviour
     {
         characterMovement.disabled = true;
         yield return new WaitForSeconds(0.1f);
-        player.transform.position = teleportTo.transform.position;
         // Sets the player's transform
-        player.transform.rotation = Quaternion.identity; //or teleportTo.transform.rotation
+        player.transform.position = teleportTo.transform.position;
+        player.transform.rotation = teleportTo.transform.rotation;
         yield return new WaitForSeconds(0.1f);
         characterMovement.disabled = false;
+        characterMovement.playerSpawnPoint = teleportTo.transform.position;
+        characterMovement.playerSpawnRotation = teleportTo.transform.rotation;
     }
 }
