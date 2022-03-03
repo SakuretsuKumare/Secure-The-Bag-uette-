@@ -27,7 +27,7 @@ public class EnemyAI : MonoBehaviour
     public bool IsIdle;
     public bool alerted;
     public bool suspicious;
-    public bool stillSuspicious;
+    public bool idleSuspicious;
     public bool playerObstructed;
     public bool noticed;
 
@@ -45,7 +45,7 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         //Patrol
-        if (currentWayPoint < this.wayPointList.Length && !IsIdle && !alerted && !suspicious && !noticed)
+        if (currentWayPoint < this.wayPointList.Length && !IsIdle && !alerted && navMeshAgent.enabled == false && !noticed)
         {
             if (targetWayPoint == null)
                 targetWayPoint = wayPointList[currentWayPoint];
@@ -87,24 +87,35 @@ public class EnemyAI : MonoBehaviour
         //Noticed
         if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && !(Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle) && !playerObstructed && !characterMovementScript.isCrouching && characterController.velocity != Vector3.zero && !noticed)
         {
-            Debug.Log("WHAT'S THAT");
+            if (navMeshAgent.enabled == true)
+            {
+                navMeshAgent.isStopped = true;
+                navMeshAgent.ResetPath();
+                lastSeenPlayerPosition = player.transform.position;
+                navMeshAgent.destination = lastSeenPlayerPosition;
+            }
             StartCoroutine(Notice());
-            navMeshAgent.isStopped = true;
-            navMeshAgent.ResetPath();
         }
 
         if (noticed && !playerObstructed)
         {
+            if (navMeshAgent.enabled == true)
+            {
+                navMeshAgent.isStopped = true;
+                navMeshAgent.ResetPath();
+                lastSeenPlayerPosition = player.transform.position;
+                navMeshAgent.destination = lastSeenPlayerPosition;
+            }
             Vector3 playerPositionAtOurHeight = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
             transform.forward = Vector3.RotateTowards(transform.forward, playerPositionAtOurHeight - transform.position, rotSpeed * Time.deltaTime, 0.0f);
         }
 
         //Suspicion
-        if (Vector3.Distance(transform.position, targetWayPoint.position) <= chaseRadius && Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Vector3.Distance(transform.position, player.transform.position) > visionRange && !suspicious && !playerObstructed)
+        if (Vector3.Distance(transform.position, targetWayPoint.position) <= chaseRadius && Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Vector3.Distance(transform.position, player.transform.position) > visionRange && !playerObstructed)
         {
             if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle)
             {
-                Debug.Log("THERE YOU ARE");
+                idleSuspicious = false;
                 suspicious = true;
                 lastSeenPlayerPosition = player.transform.position;
                 navMeshAgent.enabled = true;
@@ -112,19 +123,28 @@ public class EnemyAI : MonoBehaviour
                 navMeshAgent.isStopped = true;
                 navMeshAgent.ResetPath();
                 navMeshAgent.destination = lastSeenPlayerPosition;
-                Debug.Log(Vector3.Distance(transform.position, lastSeenPlayerPosition));
             }
         }
-        if (navMeshAgent.enabled == true && Vector3.Distance(transform.position, lastSeenPlayerPosition) < 0.1)
+        if (navMeshAgent.enabled == true && Vector3.Distance(transform.position, lastSeenPlayerPosition) < 0.1 && !idleSuspicious)
         {
-                Debug.Log("WHERE DID HE GO");
-                StartCoroutine(Idle());
+            idleSuspicious = true;
+            StartCoroutine(IdleSuspicious());
         }
+
+        //Distance Check
+        /*if (Vector3.Distance(transform.position, targetWayPoint.position) > chaseRadius && navMeshAgent.enabled == true)
+        {
+            suspicious = false;
+            navMeshAgent.speed = speed;
+            navMeshAgent.isStopped = true;
+            navMeshAgent.ResetPath();
+            navMeshAgent.destination = targetWayPoint.position;
+        }*/
     }
 
     void walk()
     {
-        if (!suspicious && !noticed)
+        if (!noticed)
         {
             transform.forward = Vector3.RotateTowards(transform.forward, targetWayPoint.position - transform.position, rotSpeed * Time.deltaTime, 0.0f);
             transform.position = Vector3.MoveTowards(transform.position, targetWayPoint.position, speed * Time.deltaTime);
@@ -161,16 +181,11 @@ public class EnemyAI : MonoBehaviour
     IEnumerator Notice()
     {
         noticed = true;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         noticed = false;
     }
     IEnumerator Idle()
     {
-        if (navMeshAgent.enabled == true)
-        {
-            stillSuspicious = true;
-            navMeshAgent.speed = 0;
-        }
         IsIdle = true;
         yield return new WaitForSeconds(Random.Range(2f, 5f));
         IsIdle = false;
@@ -181,7 +196,29 @@ public class EnemyAI : MonoBehaviour
             navMeshAgent.isStopped = true;
             navMeshAgent.ResetPath();
             navMeshAgent.destination = targetWayPoint.position;
-            stillSuspicious = false;
+        }
+    }
+
+    IEnumerator IdleSuspicious()
+    {
+        if (navMeshAgent.enabled == true)
+        {
+            navMeshAgent.speed = 0;
+        }
+        yield return new WaitForSeconds(2f);
+        if (navMeshAgent.enabled == true && idleSuspicious)
+        {
+            suspicious = false;
+            navMeshAgent.speed = speed;
+            navMeshAgent.isStopped = true;
+            navMeshAgent.ResetPath();
+            navMeshAgent.destination = targetWayPoint.position;
+            yield return new WaitForSeconds(0.2f);
+            idleSuspicious = false;
+        }
+        else
+        {
+            suspicious = false;
         }
     }
 
