@@ -174,7 +174,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &5386774639270427566
 Transform:
@@ -251,6 +251,7 @@ GameObject:
   - component: {fileID: 6958399706737929143}
   - component: {fileID: 5370189834175411221}
   - component: {fileID: 5446276446552670980}
+  - component: {fileID: 88163241}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -339,6 +340,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &88163241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5703641496874437604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f770838bf7b2d4abd298d62d8e22cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraToLookAt: {fileID: 0}
 --- !u!1 &6696147053631315293
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,7 +457,6 @@ GameObject:
   - component: {fileID: 3180235961837043746}
   - component: {fileID: 5840640055053925479}
   - component: {fileID: 7010930430858207567}
-  - component: {fileID: 8471600271167175262}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -505,16 +518,3 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &8471600271167175262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7987425564454029353}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6f770838bf7b2d4abd298d62d8e22cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraToLookAt: {fileID: 0}

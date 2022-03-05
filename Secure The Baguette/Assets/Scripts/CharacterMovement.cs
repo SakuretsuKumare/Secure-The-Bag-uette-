@@ -92,13 +92,13 @@ public class CharacterMovement : MonoBehaviour
             }
         }
 
+        /*
         // The player can jump with the space bar.
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        /*
         // Checks if the player is sprinting or not (Left Shift to sprint)
         if (Input.GetKey(KeyCode.LeftShift))
         {

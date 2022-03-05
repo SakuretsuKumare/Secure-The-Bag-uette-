@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Billboard : MonoBehaviour
 {
-    public Camera cameraToLookAt;
+    public Transform cameraToLookAt;
 
     // Start is called before the first frame update
     void Start()
@@ -13,8 +13,8 @@ public class Billboard : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        transform.LookAt(cameraToLookAt.transform);
+        transform.LookAt(transform.position + cameraToLookAt.forward);
     }
 }
