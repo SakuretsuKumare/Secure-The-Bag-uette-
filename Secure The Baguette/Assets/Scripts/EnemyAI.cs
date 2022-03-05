@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class EnemyAI : MonoBehaviour
 {
-    public CharacterController characterController;
-    public CharacterMovement characterMovementScript;
+    private CharacterController characterController;
+    private CharacterMovement characterMovementScript;
     public Transform[] wayPointList;
     public int currentWayPoint;
     Transform targetWayPoint;
