@@ -8,6 +8,7 @@ public class CursorScript : MonoBehaviour
     void Start()
     {
         HideCursor();
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     // Update is called once per frame

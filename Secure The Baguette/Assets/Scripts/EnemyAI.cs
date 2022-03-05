@@ -129,6 +129,7 @@ public class EnemyAI : MonoBehaviour
                 navMeshAgent.destination = lastSeenPlayerPosition;
             }
         }
+
         if (navMeshAgent.enabled == true && Vector3.Distance(transform.position, lastSeenPlayerPosition) < 0.1 && !idleSuspicious)
         {
             idleSuspicious = true;
@@ -174,14 +175,15 @@ public class EnemyAI : MonoBehaviour
 
                 targetWayPoint = wayPointList[currentWayPoint];
             }
-
         }
+
         else
         {
             navMeshAgent.destination = targetWayPoint.position;
         }
     }
 
+    // If the enemy notices the player
     IEnumerator Notice()
     {
         noticed = true;
@@ -193,6 +195,7 @@ public class EnemyAI : MonoBehaviour
         IsIdle = true;
         yield return new WaitForSeconds(Random.Range(2f, 5f));
         IsIdle = false;
+
         if (navMeshAgent.enabled == true)
         {
             suspicionSign.enabled = false;
@@ -210,7 +213,9 @@ public class EnemyAI : MonoBehaviour
         {
             navMeshAgent.speed = 0;
         }
+
         yield return new WaitForSeconds(2f);
+
         if (navMeshAgent.enabled == true && idleSuspicious)
         {
             suspicionSign.enabled = false;
@@ -222,6 +227,7 @@ public class EnemyAI : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
             idleSuspicious = false;
         }
+
         else
         {
             suspicious = false;
@@ -234,6 +240,7 @@ public class EnemyAI : MonoBehaviour
         {
             navMeshAgent.speed = 0;
         }
+
         alerted = true;
         playerRend.material.color = new Color32(5, 192, 236, 255);
         characterMovementScript.speed = 0f;
@@ -257,6 +264,7 @@ public class EnemyAI : MonoBehaviour
         {
             StartCoroutine(Caught());
         }
+
         else
         {
             if (other.gameObject.CompareTag("Waypoint") || other.gameObject.CompareTag("IdleExclusion"))
