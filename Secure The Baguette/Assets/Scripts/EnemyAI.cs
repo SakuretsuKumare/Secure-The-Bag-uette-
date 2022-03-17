@@ -130,7 +130,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        if (navMeshAgent.enabled == true && Vector3.Distance(transform.position, lastSeenPlayerPosition) < 0.1 && !idleSuspicious)
+        if (navMeshAgent.enabled == true && Vector3.Distance(transform.position, lastSeenPlayerPosition) < 0.3f && !idleSuspicious)
         {
             idleSuspicious = true;
             StartCoroutine(IdleSuspicious());
@@ -209,6 +209,7 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator IdleSuspicious()
     {
+        //Debug.Log("Where did he go?");
         if (navMeshAgent.enabled == true)
         {
             navMeshAgent.speed = 0;
@@ -241,6 +242,7 @@ public class EnemyAI : MonoBehaviour
             navMeshAgent.speed = 0;
         }
 
+        suspicionSign.enabled = true;
         alerted = true;
         playerRend.material.color = new Color32(5, 192, 236, 255);
         characterMovementScript.speed = 0f;
