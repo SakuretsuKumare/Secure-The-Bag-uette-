@@ -8,6 +8,7 @@ public class TeleportWait : MonoBehaviour
     private CharacterMovement characterMovement;
     public Transform teleportTo;
     public float waitSeconds;
+    public int setAudioLayer;
 
     // Start is called before the first frame update
     void Start()
@@ -35,5 +36,6 @@ public class TeleportWait : MonoBehaviour
         characterMovement.disabled = false;
         characterMovement.playerSpawnPoint = teleportTo.transform.position;
         characterMovement.playerSpawnRotation = teleportTo.transform.rotation;
+        MusicManager.singleton.FadeIn(1, setAudioLayer);
     }
 }
