@@ -53,6 +53,7 @@ public class Door2Script : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, movedUp, doorSpeed * Time.deltaTime);
         }
+        
         else
         {
             if (goingUp && moving)
@@ -65,6 +66,7 @@ public class Door2Script : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, origin, doorSpeed * Time.deltaTime);
         }
+
         else
         {
             if (!goingUp && moving)
@@ -82,6 +84,7 @@ public class Door2Script : MonoBehaviour
         {
             moving = false;
         }
+
         else
         {
             if (Vector3.Distance(transform.position, origin) > Mathf.Epsilon)
@@ -94,6 +97,7 @@ public class Door2Script : MonoBehaviour
         {
             moving = false;
         }
+
         else
         {
             if (Vector3.Distance(transform.position, movedUp) > Mathf.Epsilon)
@@ -101,7 +105,6 @@ public class Door2Script : MonoBehaviour
                 moving = true;
             }
         }
-
     }
 
     IEnumerator CoolDown()
@@ -113,4 +116,3 @@ public class Door2Script : MonoBehaviour
         cooledDown = true;
     }
 }
-        

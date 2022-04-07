@@ -15,12 +15,12 @@ public class MusicManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach(AudioSource i in listOfAudioSources)
+        foreach (AudioSource i in listOfAudioSources)
         {
             i.volume = 0;
         }
 
-        if(listOfAudioSources[0].volume == 0)
+        if (listOfAudioSources[0].volume == 0)
         {
             listOfAudioSources[0].volume = 1;
         }
