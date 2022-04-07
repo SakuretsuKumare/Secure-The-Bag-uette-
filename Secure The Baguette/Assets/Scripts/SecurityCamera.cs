@@ -5,24 +5,20 @@ using UnityEngine.UI;
 
 public class SecurityCamera : MonoBehaviour
 {
-    public CharacterController characterController;
-    public CharacterMovement characterMovementScript;
-    public Vector3 lastSeenPlayerPosition;
-    public float speed = 1;
+    public float speed;
     public float rotAngleYMin;
     public float rotAngleYMax;
-    public float originRotation;
-    public float resetCameraAngle;
-    public float extendedVisionRangeMultiplier;
-    public Renderer playerRend;
     public Light detectionLight;
     public bool alerted;
     public bool playerObstructed;
     public RawImage suspicionSign;
     public float visionRange;
     public float visionConeAngle;
+    private float resetCameraAngle;
+    private float originRotation;
     private GameObject player;
-    private GameObject playerModel;
+    private CharacterController characterController;
+    private CharacterMovement characterMovementScript;
     void Start()
     {
         resetCameraAngle = transform.localEulerAngles.x;
@@ -30,9 +26,9 @@ public class SecurityCamera : MonoBehaviour
         characterMovementScript = GameObject.Find("Player").GetComponent<CharacterMovement>();
         alerted = false;
         player = GameObject.Find("Player");
-        playerModel = GameObject.Find("PlayerModel");
-        playerRend = playerModel.GetComponent<MeshRenderer>();
         characterController = player.GetComponent<CharacterController>();
+        visionRange = detectionLight.range - 2;
+        visionConeAngle = detectionLight.spotAngle / 2 + 1;
     }
 
     void Update()
@@ -46,7 +42,7 @@ public class SecurityCamera : MonoBehaviour
 
         //Raycasting
         RaycastHit hit;
-        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Physics.Raycast(transform.position, (player.transform.position - transform.position), out hit, visionRange * extendedVisionRangeMultiplier) && !hit.transform.CompareTag("Player"))
+        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange && Physics.Raycast(transform.position, (player.transform.position - transform.position), out hit, visionRange) && !hit.transform.CompareTag("Player"))
         {
             Debug.DrawRay(transform.position, (player.transform.position - transform.position), Color.red, 0.01f, false);
             playerObstructed = true;
@@ -77,11 +73,9 @@ public class SecurityCamera : MonoBehaviour
         {
             suspicionSign.enabled = true;
             alerted = true;
-            playerRend.material.color = new Color32(5, 192, 236, 255);
             characterMovementScript.speed = 0f;
             yield return new WaitForSeconds(0.5f);
             characterController.enabled = false;
-            playerRend.material.color = new Color32(5, 96, 236, 255);
             player.transform.position = characterMovementScript.playerSpawnPoint;
             player.transform.rotation = Quaternion.identity;
             characterController.enabled = true;

@@ -148,10 +148,7 @@ MonoBehaviour:
   speed: 0.5
   rotAngleYMin: -45
   rotAngleYMax: 45
-  originRotation: 0
-  resetCameraAngle: 0
   extendedVisionRangeMultiplier: 3
-  playerRend: {fileID: 0}
   detectionLight: {fileID: 4690543949437676442}
   alerted: 0
   playerObstructed: 0
@@ -251,7 +248,6 @@ GameObject:
   - component: {fileID: 6958399706737929143}
   - component: {fileID: 5370189834175411221}
   - component: {fileID: 5446276446552670980}
-  - component: {fileID: 88163241}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -340,19 +336,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &88163241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5703641496874437604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6f770838bf7b2d4abd298d62d8e22cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraToLookAt: {fileID: 0}
 --- !u!1 &6696147053631315293
 GameObject:
   m_ObjectHideFlags: 0

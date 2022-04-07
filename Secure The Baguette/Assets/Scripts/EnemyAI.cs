@@ -7,22 +7,15 @@ using UnityEngine.UI;
 
 public class EnemyAI : MonoBehaviour
 {
-    private CharacterController characterController;
-    private CharacterMovement characterMovementScript;
     public Transform[] wayPointList;
-    public int currentWayPoint;
     Transform targetWayPoint;
-    public Vector3 lastSeenPlayerPosition;
-    private GameObject player;
-    private GameObject playerModel;
     public RawImage suspicionSign;
-    private NavMeshAgent navMeshAgent;
-    public Renderer playerRend;
     public Light detectionLight;
     public float visionRange;
     public float extendedVisionRangeMultiplier;
+    public float outOfViewRange;
     public float visionConeAngle;
-    public float chaseRadius;
+    //public float chaseRadius;
     public float chaseSpeed;
     public float speed;
     public float rotSpeed;
@@ -32,6 +25,12 @@ public class EnemyAI : MonoBehaviour
     public bool idleSuspicious;
     public bool playerObstructed;
     public bool noticed;
+    private GameObject player;
+    private NavMeshAgent navMeshAgent;
+    private int currentWayPoint;
+    private Vector3 lastSeenPlayerPosition;
+    private CharacterController characterController;
+    private CharacterMovement characterMovementScript;
 
     void Start()
     {
@@ -39,8 +38,6 @@ public class EnemyAI : MonoBehaviour
         characterMovementScript = GameObject.Find("Player").GetComponent<CharacterMovement>();
         alerted = false;
         player = GameObject.Find("Player");
-        playerModel = GameObject.Find("PlayerModel");
-        playerRend = playerModel.GetComponent<MeshRenderer>();
         characterController = player.GetComponent<CharacterController>();
     }
 
@@ -87,7 +84,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         //Noticed
-        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && !(Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle) && !playerObstructed && !characterMovementScript.isCrouching && characterController.velocity != Vector3.zero && !noticed)
+        if (Vector3.Distance(transform.position, player.transform.position) <= outOfViewRange && !playerObstructed && !characterMovementScript.isCrouching && characterController.velocity != Vector3.zero && !noticed)
         {
             if (navMeshAgent.enabled == true)
             {
@@ -99,7 +96,7 @@ public class EnemyAI : MonoBehaviour
             StartCoroutine(Notice());
         }
 
-        if (noticed && !playerObstructed)
+        if (noticed)
         {
             if (navMeshAgent.enabled == true)
             {
@@ -108,13 +105,14 @@ public class EnemyAI : MonoBehaviour
                 navMeshAgent.ResetPath();
                 lastSeenPlayerPosition = player.transform.position;
                 navMeshAgent.destination = lastSeenPlayerPosition;
+                navMeshAgent.speed = chaseSpeed;
             }
             Vector3 playerPositionAtOurHeight = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
             transform.forward = Vector3.RotateTowards(transform.forward, playerPositionAtOurHeight - transform.position, rotSpeed * Time.deltaTime, 0.0f);
         }
 
         //Suspicion
-        if (Vector3.Distance(transform.position, targetWayPoint.position) <= chaseRadius && Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Vector3.Distance(transform.position, player.transform.position) > visionRange && !playerObstructed)
+        if (Vector3.Distance(transform.position, player.transform.position) <= visionRange * extendedVisionRangeMultiplier && Vector3.Distance(transform.position, player.transform.position) > visionRange && !playerObstructed)
         {
             if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle)
             {
@@ -151,7 +149,9 @@ public class EnemyAI : MonoBehaviour
     {
         if (!noticed)
         {
-            transform.forward = Vector3.RotateTowards(transform.forward, targetWayPoint.position - transform.position, rotSpeed * Time.deltaTime, 0.0f);
+            Vector3 lookDirection = (targetWayPoint.position - transform.position).normalized;
+            lookDirection.y = 0;
+            transform.forward = Vector3.RotateTowards(transform.forward, lookDirection, rotSpeed * Time.deltaTime, 0.0f);
             transform.position = Vector3.MoveTowards(transform.position, targetWayPoint.position, speed * Time.deltaTime);
 
             if (transform.position == targetWayPoint.position)
@@ -244,11 +244,9 @@ public class EnemyAI : MonoBehaviour
 
         suspicionSign.enabled = true;
         alerted = true;
-        playerRend.material.color = new Color32(5, 192, 236, 255);
         characterMovementScript.speed = 0f;
         yield return new WaitForSeconds(0.5f);
         characterController.enabled = false;
-        playerRend.material.color = new Color32(5, 96, 236, 255);
         player.transform.position = characterMovementScript.playerSpawnPoint;
         player.transform.rotation = characterMovementScript.playerSpawnRotation;
         characterController.enabled = true;

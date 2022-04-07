@@ -12,7 +12,7 @@ public class Door2Script : MonoBehaviour
     public bool stayOpen;
     public bool moving;
     private bool cooledDown;
-    private bool coolDownOnce;
+    private bool callOnce;
     private Vector3 movedUp;
     private Vector3 origin;
     private GameObject player;
@@ -42,9 +42,9 @@ public class Door2Script : MonoBehaviour
                 goingUp = false;
             }
             
-            if (!coolDownOnce && !cooledDown && Vector3.Distance(transform.position, origin) > Mathf.Epsilon)
+            if (!callOnce && !cooledDown && Vector3.Distance(transform.position, origin) > Mathf.Epsilon)
             {
-                coolDownOnce = true;
+                callOnce = true;
                 StartCoroutine(CoolDown());
             }
         }
@@ -109,7 +109,7 @@ public class Door2Script : MonoBehaviour
         stayOpen = true;
         yield return new WaitForSeconds(2f);
         stayOpen = false;
-        coolDownOnce = false;
+        callOnce = false;
         cooledDown = true;
     }
 }
