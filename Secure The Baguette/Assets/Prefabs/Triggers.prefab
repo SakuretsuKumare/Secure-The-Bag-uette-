@@ -1,25 +1,25 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!65 &672934010
+--- !u!65 &1392205724
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1862320172181019309}
+  m_GameObject: {fileID: 1862320170991856972}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.0000002, y: 1, z: 1.0000002}
   m_Center: {x: 0.000000834465, y: -0.00000029802322, z: 0.0000038146973}
---- !u!114 &672934009
+--- !u!114 &1392205720
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1862320172181019309}
+  m_GameObject: {fileID: 1862320170991856972}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6599dbd5615f684e98f39c55f6e0d3c, type: 3}
@@ -27,8 +27,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialPanel: {fileID: 0}
   textBox: {fileID: 0}
-  tutorialText: Beware of the security cameras!  Luckily, the cameras can't detect
-    audio!
+  tutorialText: Use WASD to move around!  Use the MOUSE to look around you.
 --- !u!65 &462512109
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -58,26 +57,26 @@ MonoBehaviour:
   textBox: {fileID: 0}
   tutorialText: Watch out for the security guards! Try to stay out of their vision.
     Hold down SHIFT to crouch and make less sound.
---- !u!65 &1392205724
+--- !u!65 &274732471
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1862320170991856972}
+  m_GameObject: {fileID: 1862320172041824110}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.0000002, y: 1, z: 1.0000002}
   m_Center: {x: 0.000000834465, y: -0.00000029802322, z: 0.0000038146973}
---- !u!114 &1392205720
+--- !u!114 &274732470
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1862320170991856972}
+  m_GameObject: {fileID: 1862320172041824110}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6599dbd5615f684e98f39c55f6e0d3c, type: 3}
@@ -85,7 +84,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialPanel: {fileID: 0}
   textBox: {fileID: 0}
-  tutorialText: Use WASD to move around!  Use the MOUSE to look around you.
+  tutorialText: That guard is holding a KEY CARD.  Sneak close to him and PRESS E
+    to pickpocket the guard.
+--- !u!65 &672934010
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862320172181019309}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000002, y: 1, z: 1.0000002}
+  m_Center: {x: 0.000000834465, y: -0.00000029802322, z: 0.0000038146973}
+--- !u!114 &672934009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862320172181019309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6599dbd5615f684e98f39c55f6e0d3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialPanel: {fileID: 0}
+  textBox: {fileID: 0}
+  tutorialText: Beware of the security cameras!  Luckily, the cameras can't detect
+    audio!
 --- !u!1 &2563034125084820316
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +154,7 @@ Transform:
   - {fileID: 1862320170991856960}
   - {fileID: 1862320171954842940}
   - {fileID: 1862320172181019297}
+  - {fileID: 1862320172041824098}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -282,7 +312,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1862320172257081767, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
   m_PrefabInstance: {fileID: 906286231}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &2137969899
+--- !u!1001 &1039507145
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -291,7 +321,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1862320172257081767, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
       propertyPath: m_Name
-      value: Tutorial Trigger 1
+      value: Tutorial Trigger 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081767, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1862320172257081769, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
       propertyPath: m_Enabled
@@ -299,19 +333,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6.75
       objectReference: {fileID: 0}
     - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 137.63983
+      value: 7.139824
       objectReference: {fileID: 0}
     - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 26.5
+      value: 25.25
       objectReference: {fileID: 0}
     - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -39.554436
+      value: 117.445564
       objectReference: {fileID: 0}
     - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
       propertyPath: m_LocalRotation.w
@@ -343,14 +381,89 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
---- !u!1 &1862320170991856972 stripped
+--- !u!1 &1862320172041824110 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1862320172257081767, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
-  m_PrefabInstance: {fileID: 2137969899}
+  m_PrefabInstance: {fileID: 1039507145}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1862320172041824098 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+  m_PrefabInstance: {fileID: 1039507145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2137969899
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2563034125084820317}
+    m_Modifications:
+    - target: {fileID: 1862320172257081767, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_Name
+      value: Tutorial Trigger 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081767, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081769, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 138.38983
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 26.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -37.304436
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
 --- !u!4 &1862320170991856960 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1862320172257081771, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
+  m_PrefabInstance: {fileID: 2137969899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1862320170991856972 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1862320172257081767, guid: 7a6b108cca1fa3c4b85c9a6f4be6c103, type: 3}
   m_PrefabInstance: {fileID: 2137969899}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2563034125250880410

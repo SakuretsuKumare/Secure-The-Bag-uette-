@@ -60,6 +60,7 @@ public class KeyHolderScript : MonoBehaviour
                 doorScript.OpenDoor();
                 Destroy(collider.gameObject);
             }
+
             else
             {
                 doorScript.OpenDoorDenied();

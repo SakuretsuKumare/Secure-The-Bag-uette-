@@ -15,10 +15,11 @@ public class TutorialUI : MonoBehaviour
     {
         //tutorialPanel = GameObject.Find("Canvas/Tutorial Panel");
         //textBox = GameObject.Find("Canvas/Tutorial Panel/Text").GetComponent<Text>();
-        tutorialPanel.SetActive(false);
+        StartCoroutine("FirstTutorial");
         hasShown = false;
     }
 
+    // When the player walks into a trigger box, tutorial screen pops up.
     private void OnTriggerEnter(Collider player)
     {
         if (player.gameObject.tag == "Player" && hasShown == false)
@@ -27,6 +28,7 @@ public class TutorialUI : MonoBehaviour
         }
     }
 
+    // Gets the words to say and displays the tutorial screen.
     IEnumerator TutorialScreen()
     {
         textBox.text = tutorialText;
@@ -34,5 +36,13 @@ public class TutorialUI : MonoBehaviour
         yield return new WaitForSeconds(4f);
         tutorialPanel.SetActive(false);
         hasShown = true;
+    }
+    
+    // Shows the first tutorial on Start()
+    IEnumerator FirstTutorial()
+    {
+        tutorialPanel.SetActive(true);
+        yield return new WaitForSeconds(4f);
+        tutorialPanel.SetActive(false);
     }
 }

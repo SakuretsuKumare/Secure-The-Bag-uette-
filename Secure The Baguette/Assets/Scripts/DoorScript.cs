@@ -118,10 +118,6 @@ public class DoorScript : MonoBehaviour
                 }
             }
         }
-        else
-        {
-
-        }
     }
 
     public KeyScript.KeyAccess GetKeyAccess()

@@ -5,7 +5,7 @@ using UnityEngine;
 public class GuardVoiceLines : MonoBehaviour
 {
     public AudioClip[] clip;
-    public int voiceLineRandomizer;
+    private int voiceLineRandomizer;
     private float waitSeconds;
 
     // Start is called before the first frame update
