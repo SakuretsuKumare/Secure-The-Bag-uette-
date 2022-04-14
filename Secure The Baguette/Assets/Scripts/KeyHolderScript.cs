@@ -58,6 +58,11 @@ public class KeyHolderScript : MonoBehaviour
                 // Currently holding the Key to open the right door.
                 //RemoveKey(doorScript.GetKeyAccess());
                 doorScript.OpenDoor();
+                Destroy(collider.gameObject);
+            }
+            else
+            {
+                doorScript.OpenDoorDenied();
             }
         }
     }

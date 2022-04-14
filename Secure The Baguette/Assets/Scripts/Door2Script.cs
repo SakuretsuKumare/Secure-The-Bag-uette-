@@ -28,21 +28,21 @@ public class Door2Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) <= openingDistance)
+        if (Vector3.Distance(transform.root.position, player.transform.position) <= openingDistance)
         {
             moving = true;
             cooledDown = false;
             goingUp = true;
         }
 
-        if (Vector3.Distance(transform.position, player.transform.position) >= closingDistance && Vector3.Distance(transform.position, origin) > Mathf.Epsilon)
+        if (Vector3.Distance(transform.root.position, player.transform.position) >= closingDistance && Vector3.Distance(transform.root.position, origin) > Mathf.Epsilon)
         {
             if (!moving)
             {
                 goingUp = false;
             }
-            
-            if (!callOnce && !cooledDown && Vector3.Distance(transform.position, origin) > Mathf.Epsilon)
+
+            if (!callOnce && !cooledDown && Vector3.Distance(transform.root.position, origin) > Mathf.Epsilon)
             {
                 callOnce = true;
                 StartCoroutine(CoolDown());
@@ -51,56 +51,56 @@ public class Door2Script : MonoBehaviour
 
         if (goingUp && !stayOpen)
         {
-            transform.position = Vector3.MoveTowards(transform.position, movedUp, doorSpeed * Time.deltaTime);
+            transform.root.position = Vector3.MoveTowards(transform.root.position, movedUp, doorSpeed * Time.deltaTime);
         }
-        
+
         else
         {
             if (goingUp && moving)
             {
-                transform.position = Vector3.MoveTowards(transform.position, movedUp, doorSpeed * Time.deltaTime);
+                transform.root.position = Vector3.MoveTowards(transform.root.position, movedUp, doorSpeed * Time.deltaTime);
             }
         }
 
         if (!goingUp && !stayOpen)
         {
-            transform.position = Vector3.MoveTowards(transform.position, origin, doorSpeed * Time.deltaTime);
+            transform.root.position = Vector3.MoveTowards(transform.root.position, origin, doorSpeed * Time.deltaTime);
         }
 
         else
         {
             if (!goingUp && moving)
             {
-                transform.position = Vector3.MoveTowards(transform.position, origin, doorSpeed * Time.deltaTime);
+                transform.root.position = Vector3.MoveTowards(transform.root.position, origin, doorSpeed * Time.deltaTime);
             }
         }
 
-        if (Vector3.Distance(transform.position, origin) < Mathf.Epsilon)
+        if (Vector3.Distance(transform.root.position, origin) < Mathf.Epsilon)
         {
             cooledDown = false;
         }
 
-        if (Vector3.Distance(transform.position, movedUp) < Mathf.Epsilon)
+        if (Vector3.Distance(transform.root.position, movedUp) < Mathf.Epsilon)
         {
             moving = false;
         }
 
         else
         {
-            if (Vector3.Distance(transform.position, origin) > Mathf.Epsilon)
+            if (Vector3.Distance(transform.root.position, origin) > Mathf.Epsilon)
             {
                 moving = true;
             }
         }
 
-        if (Vector3.Distance(transform.position, origin) < Mathf.Epsilon)
+        if (Vector3.Distance(transform.root.position, origin) < Mathf.Epsilon)
         {
             moving = false;
         }
 
         else
         {
-            if (Vector3.Distance(transform.position, movedUp) > Mathf.Epsilon)
+            if (Vector3.Distance(transform.root.position, movedUp) > Mathf.Epsilon)
             {
                 moving = true;
             }

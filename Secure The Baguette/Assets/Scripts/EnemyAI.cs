@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class EnemyAI : MonoBehaviour
 {
+    public AudioSource guardAudio;
+    public AudioClip[] clips;
     public Transform[] wayPointList;
     Transform targetWayPoint;
     public RawImage suspicionSign;
@@ -34,6 +36,7 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+        guardAudio = gameObject.GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         characterMovementScript = GameObject.Find("Player").GetComponent<CharacterMovement>();
         alerted = false;
@@ -242,10 +245,13 @@ public class EnemyAI : MonoBehaviour
             navMeshAgent.speed = 0;
         }
 
+        var caughtAudio = clips[0];
+        guardAudio.clip = caughtAudio;
+        guardAudio.Play();
         suspicionSign.enabled = true;
         alerted = true;
         characterMovementScript.speed = 0f;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(5f);
         characterController.enabled = false;
         player.transform.position = characterMovementScript.playerSpawnPoint;
         player.transform.rotation = characterMovementScript.playerSpawnRotation;

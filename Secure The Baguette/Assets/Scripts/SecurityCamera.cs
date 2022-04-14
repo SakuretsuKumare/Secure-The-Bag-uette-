@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class SecurityCamera : MonoBehaviour
 {
+    public AudioSource cameraAudio;
+    public AudioClip[] clips;
     public float speed;
     public float rotAngleYMin;
     public float rotAngleYMax;
@@ -21,6 +23,7 @@ public class SecurityCamera : MonoBehaviour
     private CharacterMovement characterMovementScript;
     void Start()
     {
+        cameraAudio = gameObject.GetComponent<AudioSource>();
         resetCameraAngle = transform.localEulerAngles.x;
         originRotation = transform.localEulerAngles.y;
         characterMovementScript = GameObject.Find("Player").GetComponent<CharacterMovement>();
@@ -71,10 +74,13 @@ public class SecurityCamera : MonoBehaviour
 
         IEnumerator Caught()
         {
+            var caughtAudio = clips[0];
+            cameraAudio.clip = caughtAudio;
+            cameraAudio.Play();
             suspicionSign.enabled = true;
             alerted = true;
             characterMovementScript.speed = 0f;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(5f);
             characterController.enabled = false;
             player.transform.position = characterMovementScript.playerSpawnPoint;
             player.transform.rotation = Quaternion.identity;
