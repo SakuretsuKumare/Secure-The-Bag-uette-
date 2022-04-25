@@ -1,22 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-
+    [SerializeField] GameObject creditsPanel;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        creditsPanel.SetActive(false);
     }
 
     public void StartGame()
@@ -24,14 +19,14 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(3);
     }
 
-    public void OpenOptions()
+    public void OpenCredits()
     {
-
+        creditsPanel.SetActive(true);
     }
 
-    public void CloseOptions()
+    public void CloseCredits()
     {
-
+        creditsPanel.SetActive(false);
     }
 
     public void QuitGame()
