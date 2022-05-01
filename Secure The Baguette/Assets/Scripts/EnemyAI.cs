@@ -129,8 +129,6 @@ public class EnemyAI : MonoBehaviour
                 navMeshAgent.ResetPath();
                 navMeshAgent.destination = lastSeenPlayerPosition;
 
-                Debug.Log("I see you!");
-
                 if (!getBackHere)
                 {
                     getBackHere = true;
@@ -253,7 +251,6 @@ public class EnemyAI : MonoBehaviour
 
         if (!characterMovementScript.isCaught)
         {
-            Debug.Log("Oh forget it");
             getBackHere = false;
 
             if (navMeshAgent.enabled == true)
