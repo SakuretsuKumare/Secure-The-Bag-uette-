@@ -10,6 +10,7 @@ public class TeleportWait : MonoBehaviour
     public Transform teleportTo;
     public float waitSeconds = 1f;
     public int setAudioLayer;
+    public GameObject keyCard;
     private Image blackFadingScreen;
     private float speed = 1.5f;
 
@@ -25,6 +26,7 @@ public class TeleportWait : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            keyCard.gameObject.SetActive(false);
             StartCoroutine("FadeIn");
             StartCoroutine("TeleportPlayer");
         }

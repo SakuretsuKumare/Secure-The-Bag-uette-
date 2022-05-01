@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
@@ -27,6 +26,7 @@ public class EnemyAI : MonoBehaviour
     public bool idleSuspicious;
     public bool playerObstructed;
     public bool noticed;
+    public bool getBackHere;
     private GameObject player;
     private NavMeshAgent navMeshAgent;
     private int currentWayPoint;
@@ -101,7 +101,7 @@ public class EnemyAI : MonoBehaviour
 
         if (noticed)
         {
-            if (navMeshAgent.enabled == true)
+            if (navMeshAgent.enabled == true && !characterMovementScript.isCaught)
             {
                 suspicionSign.enabled = true;
                 navMeshAgent.isStopped = true;
@@ -128,6 +128,14 @@ public class EnemyAI : MonoBehaviour
                 navMeshAgent.isStopped = true;
                 navMeshAgent.ResetPath();
                 navMeshAgent.destination = lastSeenPlayerPosition;
+
+                Debug.Log("I see you!");
+
+                if (!getBackHere)
+                {
+                    getBackHere = true;
+                    StartCoroutine(GiveUp());
+                }
             }
         }
 
@@ -137,7 +145,7 @@ public class EnemyAI : MonoBehaviour
             StartCoroutine(IdleSuspicious());
         }
 
-        //Distance Check
+        //Distance From Spawn Check
         /*if (Vector3.Distance(transform.position, targetWayPoint.position) > chaseRadius && navMeshAgent.enabled == true)
         {
             suspicious = false;
@@ -212,7 +220,8 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator IdleSuspicious()
     {
-        //Debug.Log("Where did he go?");
+        getBackHere = false;
+
         if (navMeshAgent.enabled == true)
         {
             navMeshAgent.speed = 0;
@@ -238,30 +247,65 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    IEnumerator GiveUp()
+    {
+        yield return new WaitForSeconds(5f);
+
+        if (!characterMovementScript.isCaught)
+        {
+            Debug.Log("Oh forget it");
+            getBackHere = false;
+
+            if (navMeshAgent.enabled == true)
+            {
+                navMeshAgent.speed = 0;
+            }
+
+            yield return new WaitForSeconds(2f);
+
+                suspicionSign.enabled = false;
+                suspicious = false;
+                navMeshAgent.speed = speed;
+                navMeshAgent.isStopped = true;
+                navMeshAgent.ResetPath();
+                navMeshAgent.destination = targetWayPoint.position;
+                yield return new WaitForSeconds(0.2f);
+                idleSuspicious = false;
+        }
+    }
+
     IEnumerator Caught()
     {
-        if (navMeshAgent.enabled == true)
+        if (!characterMovementScript.isCaught)
         {
-            navMeshAgent.speed = 0;
-        }
 
-        var caughtAudio = clips[0];
-        guardAudio.clip = caughtAudio;
-        guardAudio.Play();
-        suspicionSign.enabled = true;
-        alerted = true;
-        characterMovementScript.speed = 0f;
-        yield return new WaitForSeconds(5f);
-        characterController.enabled = false;
-        player.transform.position = characterMovementScript.playerSpawnPoint;
-        player.transform.rotation = characterMovementScript.playerSpawnRotation;
-        characterController.enabled = true;
-        characterMovementScript.speed = 16f;
-        //Scene scene = SceneManager.GetActiveScene(); 
-        //SceneManager.LoadScene(scene.name);
-        alerted = false;
-        suspicionSign.enabled = false;
-        StartCoroutine(Idle());
+            if (navMeshAgent.enabled == true)
+            {
+                navMeshAgent.speed = 0;
+            }
+
+            if (!characterMovementScript.isCaught)
+            {
+                characterMovementScript.isCaught = true;
+            }
+
+            var caughtAudio = clips[0];
+            guardAudio.clip = caughtAudio;
+            guardAudio.Play();
+            suspicionSign.enabled = true;
+            alerted = true;
+            characterMovementScript.speed = 0f;
+            yield return new WaitForSeconds(5f);
+            characterController.enabled = false;
+            characterMovementScript.isCaught = false;
+            player.transform.position = characterMovementScript.playerSpawnPoint;
+            player.transform.rotation = characterMovementScript.playerSpawnRotation;
+            characterController.enabled = true;
+            characterMovementScript.speed = 16f;
+            alerted = false;
+            suspicionSign.enabled = false;
+            StartCoroutine(Idle());
+        }
     }
 
     private void OnTriggerEnter(Collider other)

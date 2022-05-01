@@ -9,6 +9,7 @@ public class CharacterMovement : MonoBehaviour
 {
     // Declaring and initiating variables.
 
+    public bool isCaught;
     public Vector3 playerSpawnPoint;
     public Quaternion playerSpawnRotation;
     public CharacterController controller;

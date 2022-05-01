@@ -74,23 +74,32 @@ public class SecurityCamera : MonoBehaviour
 
         IEnumerator Caught()
         {
-            var caughtAudio = clips[0];
-            cameraAudio.clip = caughtAudio;
-            cameraAudio.Play();
-            suspicionSign.enabled = true;
-            alerted = true;
-            characterMovementScript.speed = 0f;
-            yield return new WaitForSeconds(5f);
-            characterController.enabled = false;
-            player.transform.position = characterMovementScript.playerSpawnPoint;
-            player.transform.rotation = Quaternion.identity;
-            characterController.enabled = true;
-            characterMovementScript.speed = 16f;
-            //Scene scene = SceneManager.GetActiveScene(); 
-            //SceneManager.LoadScene(scene.name);
-            alerted = false;
-            transform.rotation = Quaternion.Euler(resetCameraAngle, 0, 0);
-            suspicionSign.enabled = false;
+            if (!characterMovementScript.isCaught)
+            {
+                if (!characterMovementScript.isCaught)
+                {
+                    characterMovementScript.isCaught = true;
+                }
+
+                var caughtAudio = clips[0];
+                cameraAudio.clip = caughtAudio;
+                cameraAudio.Play();
+                suspicionSign.enabled = true;
+                alerted = true;
+                characterMovementScript.speed = 0f;
+                yield return new WaitForSeconds(5f);
+                characterController.enabled = false;
+                characterMovementScript.isCaught = false;
+                player.transform.position = characterMovementScript.playerSpawnPoint;
+                player.transform.rotation = Quaternion.identity;
+                characterController.enabled = true;
+                characterMovementScript.speed = 16f;
+                //Scene scene = SceneManager.GetActiveScene(); 
+                //SceneManager.LoadScene(scene.name);
+                alerted = false;
+                transform.rotation = Quaternion.Euler(resetCameraAngle, 0, 0);
+                suspicionSign.enabled = false;
+            }
         }
     }
 }
