@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SecurityCamera : MonoBehaviour
 {
+    public UI_KeyHolder KeyHolderUI;
     public AudioSource cameraAudio;
     public AudioClip[] clips;
     public float speed;
@@ -93,6 +94,27 @@ public class SecurityCamera : MonoBehaviour
                 player.transform.position = characterMovementScript.playerSpawnPoint;
                 player.transform.rotation = Quaternion.identity;
                 characterController.enabled = true;
+
+                foreach (GameObject obj in player.GetComponent<CharacterMovement>().enemyPickPocketed)
+                {
+                    if (obj.GetComponent<PickPocket>().enabled == true && obj.GetComponent<PickPocket>().noKey == true)
+                    {
+                        obj.GetComponent<PickPocket>().noKey = false;
+                    }
+                }
+
+                player.GetComponent<CharacterMovement>().enemyPickPocketed.Clear();
+                player.GetComponent<CharacterMovement>().accessGranted = false;
+                player.GetComponent<KeyHolderScript>().keyList.Clear();
+                KeyHolderUI.UpdateVisual();
+
+                foreach (var obj in player.GetComponent<CharacterMovement>().levelRecipesCollected)
+                {
+                    obj.GetComponent<DestroyObject>().recipeMesh.enabled = true;
+                    obj.GetComponent<DestroyObject>().recipeParticles.Play();
+                    obj.GetComponent<DestroyObject>().grabbed = false;
+                }
+                player.GetComponent<CharacterMovement>().levelRecipesCollected.Clear();
                 characterMovementScript.speed = 16f;
                 //Scene scene = SceneManager.GetActiveScene(); 
                 //SceneManager.LoadScene(scene.name);

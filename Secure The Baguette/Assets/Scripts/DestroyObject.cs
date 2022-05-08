@@ -6,14 +6,14 @@ public class DestroyObject : MonoBehaviour
 {
     public AudioSource recipeAudio;
     public MeshRenderer recipeMesh;
-    public GameObject recipeParticles;
-    private bool grabbed;
+    public ParticleSystem recipeParticles;
+    public bool grabbed;
 
     void Start()
     {
         recipeAudio = gameObject.GetComponent<AudioSource>();
         recipeMesh = gameObject.GetComponent<MeshRenderer>();
-        recipeParticles = gameObject.transform.GetChild(0).gameObject;
+        recipeParticles = gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<ParticleSystem>();
     }
 
     // Destroys the game object when touched.
@@ -23,15 +23,9 @@ public class DestroyObject : MonoBehaviour
         {
             grabbed = true;
             recipeMesh.enabled = false;
-            Destroy(recipeParticles);
+            recipeParticles.Stop();
             recipeAudio.Play();
-            StartCoroutine(WaitBeforeDestroy());
+            other.gameObject.GetComponent<CharacterMovement>().levelRecipesCollected.Add(gameObject);
         }
-    }
-
-    IEnumerator WaitBeforeDestroy()
-    {
-        yield return new WaitForSeconds(3f);
-        Destroy(gameObject);
     }
 }

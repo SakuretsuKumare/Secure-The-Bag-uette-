@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class EnemyAI : MonoBehaviour
 {
+    public UI_KeyHolder KeyHolderUI;
+    public Transform container;
+    public GameObject riggedGuard;
+    public Animator guardAnim;
     public AudioSource guardAudio;
     public AudioClip[] clips;
     public Transform[] wayPointList;
@@ -36,6 +40,7 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+        guardAnim = riggedGuard.GetComponent<Animator>();
         guardAudio = gameObject.GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         characterMovementScript = GameObject.Find("Player").GetComponent<CharacterMovement>();
@@ -119,22 +124,25 @@ public class EnemyAI : MonoBehaviour
         {
             if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle)
             {
-                if (!playSuspicionSound)
+                if (!playSuspicionSound && !characterMovementScript.isCaught)
                 {
                     playSuspicionSound = true;
                     var suspicionAudio = clips[1];
                     guardAudio.PlayOneShot(suspicionAudio, 1);
                 }
+                guardAnim.SetBool("Idle", false);
+                guardAnim.SetBool("Walk", true);
+                guardAnim.SetBool("Run", true);
+                guardAnim.SetBool("Detected", false);
                 suspicionSign.enabled = true;
                 idleSuspicious = false;
                 suspicious = true;
-                lastSeenPlayerPosition = player.transform.position;
-                navMeshAgent.enabled = true;
-                navMeshAgent.speed = chaseSpeed;
                 navMeshAgent.isStopped = true;
                 navMeshAgent.ResetPath();
                 navMeshAgent.destination = lastSeenPlayerPosition;
-
+                lastSeenPlayerPosition = player.transform.position;
+                navMeshAgent.enabled = true;
+                navMeshAgent.speed = chaseSpeed;
                 if (!getBackHere)
                 {
                     getBackHere = true;
@@ -154,6 +162,10 @@ public class EnemyAI : MonoBehaviour
     {
         if (!noticed)
         {
+            guardAnim.SetBool("Idle", false);
+            guardAnim.SetBool("Walk", true);
+            guardAnim.SetBool("Run", false);
+            guardAnim.SetBool("Detected", false);
             Vector3 lookDirection = (targetWayPoint.position - transform.position).normalized;
             lookDirection.y = 0;
             transform.forward = Vector3.RotateTowards(transform.forward, lookDirection, rotSpeed * Time.deltaTime, 0.0f);
@@ -198,9 +210,17 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator Idle()
     {
+        guardAnim.SetBool("Idle", true);
+        guardAnim.SetBool("Walk", false);
+        guardAnim.SetBool("Run", false);
+        guardAnim.SetBool("Detected", false);
         IsIdle = true;
         yield return new WaitForSeconds(Random.Range(2f, 5f));
         IsIdle = false;
+        guardAnim.SetBool("Idle", false);
+        guardAnim.SetBool("Walk", true);
+        guardAnim.SetBool("Run", false);
+        guardAnim.SetBool("Detected", false);
 
         if (navMeshAgent.enabled == true)
         {
@@ -215,6 +235,10 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator IdleSuspicious()
     {
+        guardAnim.SetBool("Idle", true);
+        guardAnim.SetBool("Walk", false);
+        guardAnim.SetBool("Run", false);
+        guardAnim.SetBool("Detected", false);
         getBackHere = false;
 
         if (navMeshAgent.enabled == true)
@@ -232,6 +256,10 @@ public class EnemyAI : MonoBehaviour
             navMeshAgent.isStopped = true;
             navMeshAgent.ResetPath();
             navMeshAgent.destination = targetWayPoint.position;
+            guardAnim.SetBool("Idle", false);
+            guardAnim.SetBool("Walk", true);
+            guardAnim.SetBool("Run", false);
+            guardAnim.SetBool("Detected", false);
             yield return new WaitForSeconds(0.2f);
             idleSuspicious = false;
             playSuspicionSound = false;
@@ -265,7 +293,11 @@ public class EnemyAI : MonoBehaviour
                 navMeshAgent.isStopped = true;
                 navMeshAgent.ResetPath();
                 navMeshAgent.destination = targetWayPoint.position;
-                yield return new WaitForSeconds(0.2f);
+                guardAnim.SetBool("Idle", false);
+                guardAnim.SetBool("Walk", true);
+                guardAnim.SetBool("Run", false);
+                guardAnim.SetBool("Detected", false);
+            yield return new WaitForSeconds(0.2f);
                 idleSuspicious = false;
                 playSuspicionSound = false;
         }
@@ -292,12 +324,38 @@ public class EnemyAI : MonoBehaviour
             suspicionSign.enabled = true;
             alerted = true;
             characterMovementScript.speed = 0f;
+            guardAnim.SetBool("Idle", false);
+            guardAnim.SetBool("Walk", false);
+            guardAnim.SetBool("Run", false);
+            guardAnim.SetBool("Detected", true);
             yield return new WaitForSeconds(5f);
             characterController.enabled = false;
             characterMovementScript.isCaught = false;
             player.transform.position = characterMovementScript.playerSpawnPoint;
             player.transform.rotation = characterMovementScript.playerSpawnRotation;
             characterController.enabled = true;
+
+            foreach (GameObject obj in player.GetComponent<CharacterMovement>().enemyPickPocketed)
+            {
+                if (obj.GetComponent<PickPocket>().enabled == true && obj.GetComponent<PickPocket>().noKey == true)
+                {
+                    obj.GetComponent<PickPocket>().noKey = false;
+                }
+            }
+
+            player.GetComponent<CharacterMovement>().enemyPickPocketed.Clear();
+            player.GetComponent<CharacterMovement>().accessGranted = false;
+            player.GetComponent<KeyHolderScript>().keyList.Clear();
+            KeyHolderUI.UpdateVisual();
+
+            foreach (GameObject obj in player.GetComponent<CharacterMovement>().levelRecipesCollected)
+            {
+                obj.GetComponent<DestroyObject>().recipeMesh.enabled = true;
+                obj.GetComponent<DestroyObject>().recipeParticles.Play();
+                obj.GetComponent<DestroyObject>().grabbed = false;
+            }  
+
+            player.GetComponent<CharacterMovement>().levelRecipesCollected.Clear();
             characterMovementScript.speed = 16f;
             alerted = false;
             suspicionSign.enabled = false;

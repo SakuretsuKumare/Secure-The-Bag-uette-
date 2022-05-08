@@ -9,6 +9,10 @@ public class CharacterMovement : MonoBehaviour
 {
     // Declaring and initiating variables.
 
+    public bool accessGranted;
+    public int totalRecipesCollected;
+    public List<GameObject> enemyPickPocketed = new List<GameObject>();
+    public List<GameObject> levelRecipesCollected = new List<GameObject>();
     public bool isCaught;
     public Vector3 playerSpawnPoint;
     public Quaternion playerSpawnRotation;

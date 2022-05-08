@@ -28,7 +28,7 @@ public class UI_KeyHolder : MonoBehaviour
         UpdateVisual();
     }
 
-    private void UpdateVisual()
+    public void UpdateVisual()
     {
         // Cleans up old keys.
         foreach (Transform child in container)
@@ -43,7 +43,7 @@ public class UI_KeyHolder : MonoBehaviour
         {
             KeyScript.KeyAccess keyAccess = keyList[i];
             Transform keyTransform = Instantiate(keyTemplate, container);
-            keyTemplate.gameObject.SetActive(true);
+            keyTransform.gameObject.SetActive(true);
             keyTransform.GetComponent<RectTransform>().anchoredPosition = new Vector2(150 * i, 0);
             Image keyImage = keyTransform.Find("Image").GetComponent<Image>();
             switch (keyAccess)

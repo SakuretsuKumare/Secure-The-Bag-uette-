@@ -8,10 +8,9 @@ public class DoorScript : MonoBehaviour
 {
     public float doorSpeed;
     public float doorLiftedAmount;
-    public bool accessGranted;
     public AudioSource doorAudio;
     public AudioClip[] clips;
-    [SerializeField] private bool close;
+    public bool close;
     [SerializeField] private Vector3 movedUp;
     [SerializeField] private Vector3 origin;
     private GameObject player;
@@ -27,12 +26,12 @@ public class DoorScript : MonoBehaviour
 
     void Update()
     {
-        if (accessGranted && !close && Vector3.Distance(transform.root.position, movedUp) > Mathf.Epsilon)
+        if (player.GetComponent<CharacterMovement>().accessGranted == true && !close && Vector3.Distance(transform.root.position, movedUp) > Mathf.Epsilon)
         {
             transform.root.position = Vector3.MoveTowards(transform.root.position, movedUp, doorSpeed * Time.deltaTime);
         }
 
-        if (close && accessGranted && Vector3.Distance(transform.root.position, origin) > Mathf.Epsilon)
+        if (close && player.GetComponent<CharacterMovement>().accessGranted == true && Vector3.Distance(transform.root.position, origin) > Mathf.Epsilon)
         {
             transform.root.position = Vector3.MoveTowards(transform.root.position, origin, doorSpeed * Time.deltaTime);
         }
@@ -48,7 +47,7 @@ public class DoorScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (accessGranted)
+            if (player.GetComponent<CharacterMovement>().accessGranted == true)
             {
                 close = false;
             }
@@ -62,7 +61,7 @@ public class DoorScript : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player") && accessGranted)
+        if (other.gameObject.CompareTag("Player") && player.GetComponent<CharacterMovement>().accessGranted == true)
         {
             close = true;
         }

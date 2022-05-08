@@ -8,7 +8,7 @@ using UnityEngine;
 public class KeyHolderScript : MonoBehaviour
 {
     public event EventHandler OnKeysChanged;
-    private List<KeyScript.KeyAccess> keyList;
+    public List<KeyScript.KeyAccess> keyList;
 
     private void Awake()
     {
@@ -57,7 +57,8 @@ public class KeyHolderScript : MonoBehaviour
             {
                 // Currently holding the Key to open the right door.
                 RemoveKey(doorScript.GetKeyAccess());
-                doorScript.accessGranted = true;
+                gameObject.GetComponent<CharacterMovement>().accessGranted = true;
+                doorScript.close = false;
                 doorScript.doorAudio.clip = doorScript.clips[1];
                 doorScript.doorAudio.Play();
             }
