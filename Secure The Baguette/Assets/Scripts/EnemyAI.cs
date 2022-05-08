@@ -16,7 +16,6 @@ public class EnemyAI : MonoBehaviour
     public float extendedVisionRangeMultiplier;
     public float outOfViewRange;
     public float visionConeAngle;
-    //public float chaseRadius;
     public float chaseSpeed;
     public float speed;
     public float rotSpeed;
@@ -27,6 +26,7 @@ public class EnemyAI : MonoBehaviour
     public bool playerObstructed;
     public bool noticed;
     public bool getBackHere;
+    public bool playSuspicionSound;
     private GameObject player;
     private NavMeshAgent navMeshAgent;
     private int currentWayPoint;
@@ -119,6 +119,12 @@ public class EnemyAI : MonoBehaviour
         {
             if (Vector3.Angle(transform.forward, player.transform.position - transform.position) <= visionConeAngle)
             {
+                if (!playSuspicionSound)
+                {
+                    playSuspicionSound = true;
+                    var suspicionAudio = clips[1];
+                    guardAudio.PlayOneShot(suspicionAudio, 1);
+                }
                 suspicionSign.enabled = true;
                 idleSuspicious = false;
                 suspicious = true;
@@ -142,16 +148,6 @@ public class EnemyAI : MonoBehaviour
             idleSuspicious = true;
             StartCoroutine(IdleSuspicious());
         }
-
-        //Distance From Spawn Check
-        /*if (Vector3.Distance(transform.position, targetWayPoint.position) > chaseRadius && navMeshAgent.enabled == true)
-        {
-            suspicious = false;
-            navMeshAgent.speed = speed;
-            navMeshAgent.isStopped = true;
-            navMeshAgent.ResetPath();
-            navMeshAgent.destination = targetWayPoint.position;
-        }*/
     }
 
     void walk()
@@ -199,6 +195,7 @@ public class EnemyAI : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         noticed = false;
     }
+
     IEnumerator Idle()
     {
         IsIdle = true;
@@ -237,10 +234,12 @@ public class EnemyAI : MonoBehaviour
             navMeshAgent.destination = targetWayPoint.position;
             yield return new WaitForSeconds(0.2f);
             idleSuspicious = false;
+            playSuspicionSound = false;
         }
 
         else
         {
+            playSuspicionSound = false;
             suspicious = false;
         }
     }
@@ -268,6 +267,7 @@ public class EnemyAI : MonoBehaviour
                 navMeshAgent.destination = targetWayPoint.position;
                 yield return new WaitForSeconds(0.2f);
                 idleSuspicious = false;
+                playSuspicionSound = false;
         }
     }
 
@@ -301,6 +301,7 @@ public class EnemyAI : MonoBehaviour
             characterMovementScript.speed = 16f;
             alerted = false;
             suspicionSign.enabled = false;
+            playSuspicionSound = false;
             StartCoroutine(Idle());
         }
     }
