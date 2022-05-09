@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TeleportWait : MonoBehaviour
 {
     private GameObject player;
+    private AudioSource elevatorAudio;
     private CharacterMovement characterMovement;
     public Transform teleportTo;
     public float waitSeconds = 1f;
@@ -16,6 +17,7 @@ public class TeleportWait : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        elevatorAudio = teleportTo.GetComponent<AudioSource>();
         player = GameObject.Find("Player");
         characterMovement = player.GetComponent<CharacterMovement>();
         blackFadingScreen = GameObject.Find("Fading Screen").GetComponent<Image>();
@@ -40,7 +42,8 @@ public class TeleportWait : MonoBehaviour
         // Sets the player's transform
         player.transform.position = teleportTo.transform.position;
         player.transform.rotation = teleportTo.transform.rotation;
-        yield return new WaitForSeconds(0.1f);
+        elevatorAudio.Play();
+        yield return new WaitForSeconds(0.4f);
         characterMovement.disabled = false;
         characterMovement.playerSpawnPoint = teleportTo.transform.position;
         characterMovement.playerSpawnRotation = teleportTo.transform.rotation;
