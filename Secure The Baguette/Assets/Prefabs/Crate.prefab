@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3780032442775845058}
   - component: {fileID: 3042110013909650326}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,9 +24,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4557238023131718264}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 15.88, y: 0.00000023841858, z: -30.87}
-  m_LocalScale: {x: 2.28779, y: 1.7304797, z: 2.28779}
+  m_LocalScale: {x: 2.2877898, y: 1.7304797, z: 2.2877898}
   m_Children:
   - {fileID: 7834752639257711817}
   m_Father: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 7834752639257711817}
   - component: {fileID: 8717272602013031387}
   - component: {fileID: 8565379568721352330}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate___Lid:storage_crate
   m_TagString: Untagged
   m_Icon: {fileID: 0}

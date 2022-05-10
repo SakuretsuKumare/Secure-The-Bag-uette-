@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject comingSoon;
     private bool pauseMenuActive = false;
 
     // Start is called before the first frame update
