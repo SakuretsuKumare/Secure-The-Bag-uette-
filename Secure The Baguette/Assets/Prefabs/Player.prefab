@@ -194,6 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c48bec9b8c95cb145841b275209e23de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerAnim: {fileID: 77975087}
   accessGranted: 0
   totalRecipesCollected: 0
   enemyPickPocketed: []
@@ -345,6 +346,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recipeAmountUI: {fileID: 0}
+--- !u!95 &77975087
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9082550738332591258}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10fedd1040279ae4180220d8ed199288, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &8271663460233484747
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -374,7 +394,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1de0844a482c9a04a9882210c2e69840, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5478968
+      value: -0.491
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1de0844a482c9a04a9882210c2e69840, type: 3}
       propertyPath: m_LocalPosition.z
@@ -418,6 +438,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1de0844a482c9a04a9882210c2e69840, type: 3}
+--- !u!1 &9082550738332591258 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1de0844a482c9a04a9882210c2e69840, type: 3}
+  m_PrefabInstance: {fileID: 8271663460233484747}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8448862211999727136 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1de0844a482c9a04a9882210c2e69840, type: 3}

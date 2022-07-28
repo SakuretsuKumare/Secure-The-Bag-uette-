@@ -9,6 +9,7 @@ public class CharacterMovement : MonoBehaviour
 {
     // Declaring and initiating variables.
 
+    public Animator playerAnim;
     public bool accessGranted;
     public int totalRecipesCollected;
     public List<GameObject> enemyPickPocketed = new List<GameObject>();
@@ -47,6 +48,38 @@ public class CharacterMovement : MonoBehaviour
         if (!disabled)
         {
             PlayerEnabled();
+        }
+
+        // Check if the character is idle or moving
+        if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1 || Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1)
+        {
+            playerAnim.SetBool("Walk", true);
+            playerAnim.SetBool("Idle", false);
+        }
+        else
+        {
+            if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 0 && Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 0)
+            {
+                playerAnim.SetBool("Idle", true);
+                playerAnim.SetBool("Walk", false);
+            }
+        }
+
+        if (isCaught)
+        {
+            if (isCrouching)
+            {
+                playerAnim.SetBool("Crouching", true);
+                playerAnim.SetBool("Idle", true);
+                playerAnim.SetBool("Walk", false);
+
+            }
+            else
+            {
+                playerAnim.SetBool("Crouching", false);
+                playerAnim.SetBool("Idle", true);
+                playerAnim.SetBool("Walk", false);
+            }
         }
     }
 
@@ -116,14 +149,20 @@ public class CharacterMovement : MonoBehaviour
         }*/
 
         // Checks if the player is crouching or not (Left CTRL to crouch)
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && !isCaught)
         {
             isCrouching = true;
+            playerAnim.SetBool("Crouching", true);
+
         }
 
         else
         {
-            isCrouching = false;
+            if (!isCaught)
+            {
+                isCrouching = false;
+                playerAnim.SetBool("Crouching", false);
+            }
         }
 
         velocity.y += gravity * Time.deltaTime;
